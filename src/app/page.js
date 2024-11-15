@@ -6,20 +6,32 @@ import {urls, api, nros} from "./constants";
 
 export default function Home() {
   const [posts, setPosts] = useState(null);
-  const [currentSelection, setCurrentSelection] = useState("everywhere");
-  const [country, setCountry] = useState("international");
+  const [country, setCountry] = useState(["international"]);
 
   useEffect(() => {
     async function fetchPosts() {
-      const res = await fetch(`${urls.proxy}/?${urls.gp}/${country}/${api.posts}?per_page=5`);
-      const data = await res.json();
+      try {
+        // Create an array of fetch promises for each country
+        const fetchPromises = country.map((c) =>
+          fetch(`${urls.proxy}/?${urls.gp}/${c}/${api.posts}?per_page=5`).then((res) => res.json())
+        );
   
-      setPosts(data);
-      setCurrentSelection(country);
+        // Use Promise.all to fetch all data concurrently
+        const allData = await Promise.all(fetchPromises);
+  
+        // Combine or process the results as needed
+        const combinedPosts = allData.flat(); // Flatten if each response is an array
+        setPosts(combinedPosts); // Update the posts state with the combined results
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
     }
-    fetchPosts();
-  }, [country]);  
-
+  
+    if (country.length > 0) {
+      fetchPosts();
+    }
+  }, [country]);
+  
   return (
     <div className="main-container">
       <header>
@@ -55,7 +67,16 @@ export default function Home() {
                         id={country} 
                         name={country} 
                         value={country}
-                        onChange={(e) => setCountry(e.target.value)}
+                        onClick={(e) => {
+                          const selectedCountry = e.target.value;
+                          setCountry((prevCountries) => {
+                            // Check if the country already exists in the array
+                            if (!prevCountries.includes(selectedCountry)) {
+                              return [...prevCountries, selectedCountry]; // Add the new country
+                            }
+                            return prevCountries.filter((newCountry) => newCountry !== country);
+                          });
+                        }}                        
                       />
                       {country}
                     </div>
@@ -81,7 +102,7 @@ export default function Home() {
           {
             posts && (
               <>
-                <h1>News from {currentSelection}:</h1>
+                <h1>News from {country.join(", ")}:</h1>
                 {posts.map((post, index) => (
                   <div key={index} className="post">
                     <div className="post-data">
