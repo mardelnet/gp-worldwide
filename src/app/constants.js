@@ -11,45 +11,15 @@ export const api = {
 }
 
 export const nros = [
-    {
-        "value": "africa",
-        "name": "Africa",
-        "countries": [
-            "africa"
-        ]
-    },
-    {
-        "value": "america",
-        "name": "America",
-        "countries": [
-            "argentina",
-            "chile",
-            "colombia"
-        ]
-    },
-    {
-        "value": "asia",
-        "name": "Asia",
-        "countries": [
-            "india",
-            "southasia",
-            "thailand"
-        ]
-    },
-    {
-        "value": "europe",
-        "name": "Europe",
-        "countries": [
-            "sweden",
-            "bulgaria",
-            "italy"
-        ]
-    },
-    {
-        "value": "oceania",
-        "name": "Oceania",
-        "countries": [
-            "aotearoa"
-        ]
-    },
+    "africa",
+    "argentina",
+    "chile",
+    "colombia",
+    "india",
+    "southasia",
+    "thailand",
+    "sweden",
+    "bulgaria",
+    "italy",
+    "aotearoa"
 ]

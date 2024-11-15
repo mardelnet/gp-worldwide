@@ -114,20 +114,18 @@ export default function Home() {
                 </select> */}
                 <label htmlFor="country">Country:</label>
                 <div className='countries'>
-                  {nros.map((nro) => (
-                    nro.countries.map((country, index) => (
-                        <div>
-                          <input 
-                            key={index} 
-                            type="checkbox" 
-                            id={country} 
-                            name={country} 
-                            value={country}
-                            onClick={(e) => selectCountries(e.target.value)}                        
-                          />
-                          {country}
-                        </div>
-                    ))
+                  {nros.map((nro, index) => (
+                    <div>
+                      <input 
+                        key={index} 
+                        type="checkbox" 
+                        id={nro} 
+                        name={nro} 
+                        value={nro}
+                        onClick={(e) => selectCountries(e.target.value)}                        
+                      />
+                      {nro}
+                    </div>
                   ))}
                 </div>
               </div>

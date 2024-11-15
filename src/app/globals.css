@@ -48,10 +48,13 @@ html, body {
     p {
       margin: 0;
     }
-    img {
-      width: 100%;
-      height: auto;
-    }
+  }
+}
+
+.post-data {
+  img {
+    width: 100%;
+    height: auto;
   }
 }
 
