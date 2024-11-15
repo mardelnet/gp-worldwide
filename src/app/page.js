@@ -2,6 +2,7 @@
  
 import { useState, useEffect } from 'react'
 import Image from "next/image";
+import { formatDate, convertDates } from './utils/functions';
 import {urls, api, nros} from "./constants";
 
 export default function Home() {
@@ -9,38 +10,33 @@ export default function Home() {
   const [country, setCountry] = useState(["international"]);
   const [date, setDate] = useState("week");
 
-  function convertDates() {
-    const today = new Date();
-  
-    if (date === "day") {
-      today.setDate(today.getDate() - 1);
-    } else if (date === "week") {
-      today.setDate(today.getDate() - 7);
-    } else if (date === "month") {
-      today.setDate(today.getDate() - 30);
-    } else {
-      today.setDate(today.getDate() - 365);
-    }
-  
-    // Format the date to the desired format "YYYY-MM-DDT23:59:59"
-    const formattedDate = today.toISOString().split("T")[0] + "T23:59:59";
-  
-    return formattedDate;
-  }
-
   useEffect(() => {
     async function fetchPosts() {
       try {
         const fetchPromises = country.map((c) =>
-          fetch(`${urls.proxy}/?${urls.gp}/${c}/${api.posts}?after=${convertDates()}&per_page=100`).then((res) => res.json())
+          fetch(`${urls.proxy}/?${urls.gp}/${c}/${api.posts}?after=${convertDates(date)}&per_page=100`)
+            .then((res) => res.json())
+            .then((data) => {
+              // Add the country name to each post in the data
+              return data.map((post) => ({ ...post, country: c }));
+            })
         );
   
         // Use Promise.all to fetch all data concurrently
         const allData = await Promise.all(fetchPromises);
   
-        // Combine or process the results as needed
+        // Combine all the posts into a single array
         const combinedPosts = allData.flat(); // Flatten if each response is an array
-        setPosts(combinedPosts); // Update the posts state with the combined results
+  
+        // Sort posts by date (newest first)
+        const sortedPosts = combinedPosts.sort((a, b) => {
+          const dateA = new Date(a.date);  // Assuming `a.date` is the date field
+          const dateB = new Date(b.date);  // Assuming `b.date` is the date field
+          return dateB - dateA; // Sort in descending order (newest first)
+        });
+  
+        // Set the sorted posts
+        setPosts(sortedPosts);
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
@@ -49,7 +45,7 @@ export default function Home() {
     if (country.length > 0) {
       fetchPosts();
     }
-  }, [country, date]);
+  }, [country, date]);  
   
   return (
     <div className="main-container">
@@ -125,11 +121,13 @@ export default function Home() {
           {
             posts && (
               <>
-                <h1>Showing {posts.length} news of the last {date} from {country.join(", ")}:</h1>
+                <h1>{posts.length} news found:</h1>
                 {posts.map((post, index) => (
                   <div key={index} className="post">
                     <div className="post-data">
-                      <p dangerouslySetInnerHTML={{ __html: post.modified }}></p>
+                      <span dangerouslySetInnerHTML={{ __html: post.country }}></span>
+                      <span> : </span>
+                      <span dangerouslySetInnerHTML={{ __html: formatDate(post.modified) }}></span>
                       <a href={`${country}/${post.id}`} target="_self" rel="noopener noreferrer">
                         <h2 dangerouslySetInnerHTML={{ __html: post.title.rendered }}></h2>
                       </a>

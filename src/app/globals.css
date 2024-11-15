@@ -40,7 +40,6 @@ html, body {
       font-size: 15px;
       line-height: 20px;
     }
-
     p {
       margin: 0;
     }
@@ -72,6 +71,10 @@ aside {
       background: aliceblue;
       border-color: cadetblue;
     }
+
+    select {
+      width: 100%;
+    }
   }
 }
 
@@ -90,8 +93,4 @@ main {
 header {
   margin-bottom: 5px;
   box-sizing: border-box;
-}
-
-select {
-  width: 100%;
 }
