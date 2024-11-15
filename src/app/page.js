@@ -1,94 +1,128 @@
+'use client'
+ 
+import { useState, useEffect } from 'react'
 import Image from "next/image";
-import styles from "./page.module.css";
+import {urls, api, nros} from "./constants";
 
 export default function Home() {
+  const [posts, setPosts] = useState(null);
+  const [currentSelection, setCurrentSelection] = useState("everywhere");
+  const [country, setCountry] = useState("international");
+
+  useEffect(() => {
+    async function fetchPosts() {
+      const res = await fetch(`${urls.proxy}/?${urls.gp}/${country}/${api.posts}?per_page=5`);
+      const data = await res.json();
+  
+      setPosts(data);
+      setCurrentSelection(country);
+    }
+    fetchPosts();
+  }, [country]);  
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
+    <div className="main-container">
+      <header>
         <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
+          src="/top-banner2.jpeg"
+          width={738}
+          height={80}
+          alt="Greenpeace Image"
           priority
         />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+      </header>
+      <div className="container">
+        <aside>
+          <div className='filters'>
+            <h3>
+              News filters:
+            </h3>
+            <label htmlFor="campaign">Campaign:</label>
+            <select>
+              <option>All</option>
+              <option>Climate</option>
+              <option>Biodiversity</option>
+              <option>Social and Economic</option>
+            </select>
+            <label htmlFor="country">Country:</label>
+            <div className='countries'>
+              {nros.map((nro) => (
+                nro.countries.map((country, index) => (
+                    <div>
+                      <input 
+                        key={index} 
+                        type="checkbox" 
+                        id={country} 
+                        name={country} 
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
+                      />
+                      {country}
+                    </div>
+                ))
+              ))}
+            </div>
+          </div>
           <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            src="/deepgreen150.gif"
+            width={150}
+            height={220}
+            alt="Greenpeace Image"
+            priority
           />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+          <div>
+            You're the visitor #7789997
+          </div>
+        </aside>
+        <main>
+          {
+            !posts && (<div>Loading...</div>)
+          }
+          {
+            posts && (
+              <>
+                <h1>News from {currentSelection}:</h1>
+                {posts.map((post, index) => (
+                  <div key={index} className="post">
+                    <div className="post-data">
+                      <p dangerouslySetInnerHTML={{ __html: post.modified }}></p>
+                      <a href={`${country}/${post.id}`} target="_self" rel="noopener noreferrer">
+                        <h2 dangerouslySetInnerHTML={{ __html: post.title.rendered }}></h2>
+                      </a>
+                      <p dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}></p>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )
+          }
+        </main>
+        <aside>
           <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+            src="/monthinpicsmarch07.gif"
+            width={150}
+            height={150}
+            alt="Greenpeace Image"
+            priority
           />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
           <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
+            src="/donations.gif"
+            width={148}
+            height={50}
+            alt="Greenpeace Image"
+            priority
           />
-          Go to nextjs.org →
-        </a>
+          <Image
+            src="/notsupported.png"
+            width={150}
+            height={150}
+            alt="Greenpeace Image"
+            priority
+          />
+        </aside>
+      </div>
+      <footer>
+        <audio src="/song.mp3" autoPlay controls></audio>
       </footer>
     </div>
   );
