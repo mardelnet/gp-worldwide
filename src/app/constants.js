@@ -11,6 +11,7 @@ export const api = {
 }
 
 export const nros = [
+    "international",
     "africa",
     "argentina",
     "chile",

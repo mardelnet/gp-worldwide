@@ -8,7 +8,7 @@ import {urls, api, nros} from "./constants";
 export default function Home() {
   const [posts, setPosts] = useState(null);
   const [singlePost, setSinglePost] = useState(null);
-  const [country, setCountry] = useState(["international"]);
+  const [country, setCountry] = useState([]);
   const [date, setDate] = useState("week");
   const [showAllPosts, setShowAllPost] = useState(true);
 
@@ -93,7 +93,7 @@ export default function Home() {
             )
           }
           {
-            posts && showAllPosts && (
+            showAllPosts && (
               <div className='filters'>
                 <h3>
                   News filters:
@@ -166,6 +166,20 @@ export default function Home() {
                   </div>
                 ))}
               </>
+            )
+          }
+          {
+            !posts && showAllPosts && (
+              <div>
+                <h1>Welcome to the Greenpeace Global News Network!</h1>
+                <p>We are thrilled to have you join us at this exciting time in Greenpeace’s global efforts to protect our environment. This site serves as your gateway to news, updates, and the latest stories from Greenpeace offices all around the world. As our movement continues to grow, we strive to bring you the most current and important news from all of our campaigns, actions, and environmental initiatives, no matter where they are taking place.</p>
+                <p>From protecting forests to fighting climate change, Greenpeace is on the front lines of environmental activism across the globe. With this website, we aim to keep you connected with the heart of our work and to share with you the victories, challenges, and important moments that shape the future of our planet.</p>
+                <p>Whether you’re an activist, a supporter, or simply someone interested in learning more about the vital work we do, you will find here a wealth of stories and insights from our teams in every corner of the world. Join us in spreading awareness, taking action, and working together for a healthier, more sustainable future.</p>
+                <p>Thank you for visiting and for standing with us as we continue our mission for a better world.</p>
+                <button onClick={() => selectCountries("international")}>
+                  Read news from Greenpeace International
+                </button>
+              </div>
             )
           }
         </main>

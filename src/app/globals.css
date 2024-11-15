@@ -52,7 +52,7 @@ html, body {
 }
 
 .post-data {
-  img {
+  img, iframe {
     width: 100%;
     height: auto;
   }
