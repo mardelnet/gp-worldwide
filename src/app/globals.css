@@ -32,8 +32,13 @@ html, body {
   display: flex;
   border-bottom: 1px solid;
   border-color: gainsboro;
-  padding-bottom: 10px;
+  padding: 10px;
   margin-bottom: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: palegreen;
+  }
 
   .post-data {
     h2 {
@@ -42,6 +47,10 @@ html, body {
     }
     p {
       margin: 0;
+    }
+    img {
+      width: 100%;
+      height: auto;
     }
   }
 }
@@ -84,7 +93,6 @@ audio {
 
 main {
   width: 400px;
-  padding: 0 10px;
   box-sizing: border-box;
   overflow-y: scroll;
   height: 100%; /* Full height within container */
