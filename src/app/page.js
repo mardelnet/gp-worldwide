@@ -211,7 +211,41 @@ export default function Home() {
         </aside>
       </div>
       <footer>
-        <audio src="/song.mp3" autoPlay controls></audio>
+        <Image
+          src="/badge1.gif"
+          width={80}
+          height={15}
+          alt="Greenpeace Image"
+          priority
+        />
+        <Image
+          src="/badge2.gif"
+          width={80}
+          height={15}
+          alt="Greenpeace Image"
+          priority
+        />
+        <Image
+          src="/badge3.gif"
+          width={80}
+          height={15}
+          alt="Greenpeace Image"
+          priority
+        />
+        <Image
+          src="/badge4.gif"
+          width={80}
+          height={15}
+          alt="Greenpeace Image"
+          priority
+        />
+        <Image
+          src="/badge5.gif"
+          width={80}
+          height={15}
+          alt="Greenpeace Image"
+          priority
+        />
       </footer>
     </div>
   );
