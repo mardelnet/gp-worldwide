@@ -64,6 +64,11 @@ footer {
     width: 100%;
     height: auto;
   }
+
+  img.flag {
+    width: 15px;
+    height: 15px;
+  }
 }
 
 aside {

@@ -36,13 +36,14 @@ export default function Home() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const fetchPromises = country.map((c) =>
-          fetch(`${urls.proxy}/?${urls.gp}/${c}/${api.posts}?after=${convertDates(date)}&per_page=100`)
-            .then((res) => res.json())
-            .then((data) => {
-              // Add the country name to each post in the data
-              return data.map((post) => ({ ...post, country: c }));
-            })
+        const fetchPromises = country.map(
+          (c) => 
+            fetch(`${urls.proxy}/?${urls.gp}/${c}/${api.posts}?after=${convertDates(date)}&per_page=100`)
+              .then((res) => res.json())
+              .then((data) => {
+                // Add the country name to each post in the data
+                return data.map((post) => ({ ...post, country: c }));
+              })
         );
   
         // Use Promise.all to fetch all data concurrently
@@ -113,18 +114,17 @@ export default function Home() {
                   <option>Social and Economic</option>
                 </select> */}
                 <label htmlFor="country">Country:</label>
-                <div className='countries'>
-                  {nros.map((nro, index) => (
-                    <div>
-                      <input 
-                        key={index} 
-                        type="checkbox" 
-                        id={nro} 
-                        name={nro} 
-                        value={nro}
-                        onClick={(e) => selectCountries(e.target.value)}                        
+                <div className="countries">
+                  {Object.values(nros).map((nro, index) => (
+                    <div key={index}>
+                      <input
+                        type="checkbox"
+                        id={nro.value}
+                        name={nro.name}
+                        value={nro.value}
+                        onClick={(e) => selectCountries(e.target.value)}
                       />
-                      {nro}
+                      <label htmlFor={nro.value}>{nro.name}</label>
                     </div>
                   ))}
                 </div>
@@ -143,7 +143,7 @@ export default function Home() {
           {
             singlePost && !showAllPosts && (
               <div className="post-data">
-                <span dangerouslySetInnerHTML={{ __html: formatDate(singlePost.modified) }}></span>
+                {/* <span dangerouslySetInnerHTML={{ __html: formatDate(singlePost.modified) }}></span> */}
                 <h2 dangerouslySetInnerHTML={{ __html: singlePost.title.rendered }}>
                 </h2>
                 <p dangerouslySetInnerHTML={{ __html: singlePost.content.rendered }}></p>
@@ -157,8 +157,13 @@ export default function Home() {
                 {posts.map((post, index) => (
                   <div key={index} className="post" onClick={() => showPost(post.country, post.id)}>
                     <div className="post-data">
-                      <span dangerouslySetInnerHTML={{ __html: post.country }}></span>
-                      <span> : </span>
+                      <Image
+                        src={`flags/${nros[post.country].flag}.svg`}
+                        width={15}
+                        height={15}
+                        alt="NRO flag"
+                        className='flag'
+                      />
                       <span dangerouslySetInnerHTML={{ __html: formatDate(post.modified) }}></span>
                       <h2 dangerouslySetInnerHTML={{ __html: post.title.rendered }}></h2>
                       <p dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}></p>
