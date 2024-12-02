@@ -36,15 +36,16 @@ export default function Home() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const fetchPromises = country.map(
-          (c) => 
-            fetch(`${urls.proxy}/?${urls.gp}/${c}/${api.posts}?after=${convertDates(date)}&per_page=100`)
-              .then((res) => res.json())
-              .then((data) => {
-                // Add the country name to each post in the data
-                return data.map((post) => ({ ...post, country: c }));
-              })
-        );
+        const fetchPromises = country.map((c) => {
+          const url = nros[c].link ?? `${urls.gp}/${c}`
+
+          return fetch(`${urls.proxy}/?${url}/${api.posts}?after=${convertDates(date)}&per_page=100`)
+            .then((res) => res.json())
+            .then((data) => {
+              // Add the country name to each post in the data
+              return data.map((post) => ({ ...post, country: c }));
+            })
+        });
   
         // Use Promise.all to fetch all data concurrently
         const allData = await Promise.all(fetchPromises);
